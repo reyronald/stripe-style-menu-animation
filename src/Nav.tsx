@@ -20,7 +20,12 @@ const menuItemOrder = [
 
 export function Nav() {
   const [state, setState] = useState<
-    | { item: null }
+    | {
+        item: null;
+        offsetLeft?: number;
+        offsetWidth?: number;
+        offsetHeight?: number;
+      }
     | {
         item: MenuItem;
         offsetLeft: number;
@@ -47,7 +52,7 @@ export function Nav() {
   };
 
   const onMouseLeave: MouseEventHandler<HTMLElement> = () => {
-    setState({ item: null });
+    setState((prev) => ({ ...prev, item: null }));
   };
 
   return (
@@ -64,18 +69,17 @@ export function Nav() {
 
       <div
         className={clsx(
-          "overlay",
-          state.item ? "opacity-100" : "opacity-0 visibility-hidden",
+          "overlay absolute transition-all",
+          state.item ? "opacity-100" : "opacity-0",
         )}
-        style={
-          state.item
-            ? {
-                left: state.offsetLeft - state.offsetWidth / 2,
-                width: state.offsetWidth,
-                height: state.offsetHeight,
-              }
-            : {}
-        }
+        style={{
+          left:
+            state.offsetLeft && state.offsetWidth
+              ? state.offsetLeft - state.offsetWidth / 2
+              : 0,
+          width: state.offsetWidth,
+          height: state.offsetHeight,
+        }}
       >
         <SlideWrapper item="Products" visibleItem={state.item}>
           <Products ref={(el) => (refs.current["Products"] = el)} />
@@ -94,7 +98,7 @@ export function Nav() {
         </SlideWrapper>
       </div>
 
-      <div style={{ textAlign: "left", marginTop: "36rem" }}>
+      <div style={{ textAlign: "left", marginTop: "16rem" }}>
         <pre>{JSON.stringify(state, null, 2)}</pre>
       </div>
     </div>
@@ -107,15 +111,16 @@ const SlideWrapper = ({
   children,
 }: PropsWithChildren<{ item: MenuItem; visibleItem: MenuItem | null }>) => {
   const order = menuItemOrder.indexOf(item);
-  const orderVisible = visibleItem ? menuItemOrder.indexOf(visibleItem) : -1;
+  const orderVisible = visibleItem ? menuItemOrder.indexOf(visibleItem) : null;
 
   return (
     <div
       className={clsx(
         "absolute",
+        "transition-all",
         item === visibleItem ? "opacity-100" : "opacity-0",
-        order > orderVisible && "x-transform-24",
-        order < orderVisible && "-x-transform-24",
+        orderVisible != null && order > orderVisible && "x-transform-24",
+        orderVisible != null && order < orderVisible && "-x-transform-24",
       )}
       style={{
         minWidth: "max-content",

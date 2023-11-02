@@ -6,24 +6,15 @@
   gap: 32px;
   list-style: none;
 }
-
 .Nav ul li {
   cursor: pointer;
 }
 
 .overlay {
-  position: absolute;
   padding: 16px 32px;
   border-radius: 6px;
   background: white;
   color: #242424;
-}
-.overlay * {
-  --duration: 250ms;
-  transition:
-    opacity var(--duration) ease,
-    left var(--duration) ease,
-    transform var(--duration) ease;
 }
 
 .absolute {
@@ -37,18 +28,13 @@
   opacity: 1;
 }
 
-.visibility-visible {
-  visibility: visible;
-}
-.visibility-hidden {
-  visibility: hidden;
-}
-
-.display-none {
-  display: none;
-}
-.display-block {
-  display: block;
+.transition-all {
+  --duration: 250ms;
+  transition:
+    opacity var(--duration) ease,
+    left var(--duration) ease,
+    width var(--duration) ease,
+    height var(--duration) ease;
 }
 
 .-x-transform-24 {

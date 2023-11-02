@@ -10,4 +10,6 @@ https://www.tiktok.com/@steve8708/video/7294799667651530027?is_from_webapp=1&sen
 
 TODO
 
-- [ ] add fade in and fade out animation
+- [ ] keyboard support
+- [ ] a11y
+- [ ] voice over
