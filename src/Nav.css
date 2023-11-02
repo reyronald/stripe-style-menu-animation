@@ -1,0 +1,59 @@
+.Nav {
+  padding: 8px;
+}
+.Nav ul {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.Nav ul li {
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  padding: 16px 32px;
+  border-radius: 6px;
+  background: white;
+  color: #242424;
+}
+.overlay * {
+  --duration: 250ms;
+  transition:
+    opacity var(--duration) ease,
+    left var(--duration) ease,
+    transform var(--duration) ease;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+.opacity-100 {
+  opacity: 1;
+}
+
+.visibility-visible {
+  visibility: visible;
+}
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.display-none {
+  display: none;
+}
+.display-block {
+  display: block;
+}
+
+.-x-transform-24 {
+  transform: translateX(-24px);
+}
+.x-transform-24 {
+  transform: translateX(24px);
+}
