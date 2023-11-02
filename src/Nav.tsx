@@ -66,7 +66,6 @@ export function Nav() {
         className={clsx(
           "overlay",
           state.item ? "opacity-100" : "opacity-0 visibility-hidden",
-          // state.item ? "visibility-visible" : "visibility-hidden",
         )}
         style={
           state.item
@@ -98,8 +97,6 @@ export function Nav() {
       <div style={{ textAlign: "left", marginTop: "36rem" }}>
         <pre>{JSON.stringify(state, null, 2)}</pre>
       </div>
-
-      <Developers />
     </div>
   );
 }
@@ -120,6 +117,9 @@ const SlideWrapper = ({
         order > orderVisible && "x-transform-24",
         order < orderVisible && "-x-transform-24",
       )}
+      style={{
+        minWidth: "max-content",
+      }}
     >
       {children}
     </div>

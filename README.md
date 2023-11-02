@@ -1,14 +1,13 @@
-# Vite + React
+# stripe-style-menu-animation
 
-This is a [Vite](https://vitejs.dev) project together with React.
+![stripe menu animation](https://github.com/reyronald/compute-img-video-aspect-ratio-demo/assets/7514993/d210655b-75b8-4314-8de1-1950cd952d44)
 
-[![Edit in CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/codesandbox/codesandbox-template-vite-react/main)
+https://stripe.com/
 
-[Configuration](https://codesandbox.io/docs/projects/learn/setting-up/tasks) `.codesandbox/tasks.json` has been added to optimize it for [CodeSandbox](https://codesandbox.io/dashboard).
+https://builder.io/blog/stipe-menus
 
-## Resources
+https://www.tiktok.com/@steve8708/video/7294799667651530027?is_from_webapp=1&sender_device=pc&web_id=7161148849155245574
 
-- [CodeSandbox — Docs](https://codesandbox.io/docs/learn)
-- [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
-- [Vite — GitHub](https://github.com/vitejs/vite)
-- [Vite — Docs](https://vitejs.dev/guide/)
+TODO
+
+- [ ] add fade in and fade out animation
