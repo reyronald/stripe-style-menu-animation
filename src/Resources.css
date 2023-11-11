@@ -1,0 +1,14 @@
+.Resources {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+}
+
+.Resources__top,
+.Resources__bottom {
+  padding: 16px 32px;
+}
+.Resources__bottom {
+  background: var(--color-black-squeeze);
+}

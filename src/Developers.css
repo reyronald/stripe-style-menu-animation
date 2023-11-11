@@ -1,0 +1,19 @@
+.Developers {
+  display: flex;
+  max-width: 700px;
+  text-align: left;
+}
+
+.Developers__left-pane {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+.Developers__right-pane {
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--color-black-squeeze);
+  min-width: 40%;
+}

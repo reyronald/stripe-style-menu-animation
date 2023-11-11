@@ -4,7 +4,7 @@
 
 https://stripe.com/
 
-https://builder.io/blog/stipe-menus
+https://www.builder.io/blog/stripe-menus
 
 https://www.tiktok.com/@steve8708/video/7294799667651530027?is_from_webapp=1&sender_device=pc&web_id=7161148849155245574
 
