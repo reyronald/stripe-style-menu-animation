@@ -1,7 +1,18 @@
 import clsx from "clsx";
-import { forwardRef, useState, useRef } from "react";
-import type { MouseEventHandler, PropsWithChildren } from "react";
+import { useState, useRef } from "react";
+import type {
+  FocusEventHandler,
+  KeyboardEventHandler,
+  MouseEventHandler,
+  PropsWithChildren,
+} from "react";
 import "./Nav.css";
+import { Developers } from "./Developers";
+import { Pricing } from "./Pricing";
+import { Products } from "./Products";
+import { Resources } from "./Resources";
+import { Solutions } from "./Solutions";
+import { Portal } from "@reach/portal";
 
 type MenuItem =
   | "Products"
@@ -23,12 +34,14 @@ export function Nav() {
     | {
         item: null;
         offsetLeft?: number;
+        offsetTop?: number;
         offsetWidth?: number;
         offsetHeight?: number;
       }
     | {
         item: MenuItem;
         offsetLeft: number;
+        offsetTop: number;
         offsetWidth: number;
         offsetHeight: number;
       }
@@ -37,71 +50,117 @@ export function Nav() {
   });
   const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+  const closeMenu = () => {
+    setState((prev) => ({ ...prev, item: null }));
+  };
+
   const getOnMouseProps = (item: MenuItem) => {
-    const onMouseEnter: MouseEventHandler<HTMLElement> = (e) => {
+    const openMenu = (buttonEl: HTMLElement) => {
       const menuEl = refs.current[item];
       setState({
         item,
-        offsetLeft: e.currentTarget.offsetLeft,
+        offsetLeft:
+          buttonEl.offsetLeft -
+          (menuEl?.offsetWidth ?? 0) / 2 +
+          (buttonEl?.offsetWidth ?? 0) / 2,
+        offsetTop: buttonEl.offsetTop + buttonEl.offsetHeight + 16,
         offsetWidth: menuEl?.offsetWidth || 0,
         offsetHeight: menuEl?.offsetHeight || 0,
       });
     };
 
-    return { onMouseEnter };
+    const onMouseEnter: MouseEventHandler<HTMLElement> = (e) => {
+      openMenu(e.currentTarget);
+    };
+    const onClick: MouseEventHandler<HTMLElement> = (e) => {
+      openMenu(e.currentTarget);
+    };
+    const onFocus: FocusEventHandler<HTMLElement> = (e) => {
+      openMenu(e.currentTarget);
+    };
+
+    const onBlur: FocusEventHandler<HTMLElement> = () => {
+      closeMenu();
+    };
+
+    return { onMouseEnter, onClick, onFocus, onBlur };
   };
 
   const onMouseLeave: MouseEventHandler<HTMLElement> = () => {
-    setState((prev) => ({ ...prev, item: null }));
+    closeMenu();
+  };
+  const onKeyDown: KeyboardEventHandler<HTMLElement> = (e) => {
+    if (e.code === "Escape") closeMenu();
   };
 
   return (
-    <div onMouseLeave={onMouseLeave}>
-      <nav className="Nav">
-        <ul>
-          <li {...getOnMouseProps("Products")}>Products</li>
-          <li {...getOnMouseProps("Solutions")}>Solutions</li>
-          <li {...getOnMouseProps("Developers")}>Developers</li>
-          <li {...getOnMouseProps("Resources")}>Resources</li>
-          <li {...getOnMouseProps("Pricing")}>Pricing</li>
-        </ul>
-      </nav>
+    <>
+      <div onMouseLeave={onMouseLeave} onKeyDown={onKeyDown}>
+        <nav className="Nav">
+          <ul>
+            <li>
+              <button {...getOnMouseProps("Products")}>Products</button>
+            </li>
+            <li>
+              <button {...getOnMouseProps("Solutions")}>Solutions</button>
+            </li>
+            <li>
+              <button {...getOnMouseProps("Developers")}>Developers</button>
+            </li>
+            <li>
+              <button {...getOnMouseProps("Resources")}>Resources</button>
+            </li>
+            <li>
+              <button {...getOnMouseProps("Pricing")}>Pricing</button>
+            </li>
+          </ul>
+        </nav>
 
-      <div
-        className={clsx(
-          "overlay absolute transition-all",
-          state.item ? "opacity-100" : "opacity-0",
-        )}
-        style={{
-          left:
-            state.offsetLeft && state.offsetWidth
-              ? state.offsetLeft - state.offsetWidth / 2
-              : 0,
-          width: state.offsetWidth,
-          height: state.offsetHeight,
-        }}
-      >
-        <SlideWrapper item="Products" visibleItem={state.item}>
-          <Products ref={(el) => (refs.current["Products"] = el)} />
-        </SlideWrapper>
-        <SlideWrapper item="Solutions" visibleItem={state.item}>
-          <Solutions ref={(el) => (refs.current["Solutions"] = el)} />
-        </SlideWrapper>
-        <SlideWrapper item="Developers" visibleItem={state.item}>
-          <Developers ref={(el) => (refs.current["Developers"] = el)} />
-        </SlideWrapper>
-        <SlideWrapper item="Resources" visibleItem={state.item}>
-          <Resources ref={(el) => (refs.current["Resources"] = el)} />
-        </SlideWrapper>
-        <SlideWrapper item="Pricing" visibleItem={state.item}>
-          <Pricing ref={(el) => (refs.current["Pricing"] = el)} />
-        </SlideWrapper>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <button>Some other interactive element on the page</button>
+          <button>Some other interactive element on the page</button>
+          <button>Some other interactive element on the page</button>
+        </div>
+
+        <div style={{ textAlign: "left", marginTop: "16rem" }}>
+          <pre>{JSON.stringify(state, null, 2)}</pre>
+        </div>
       </div>
 
-      <div style={{ textAlign: "left", marginTop: "16rem" }}>
-        <pre>{JSON.stringify(state, null, 2)}</pre>
-      </div>
-    </div>
+      <Portal type="overlay-container">
+        <div
+          className={clsx(
+            "overlay absolute transition-all",
+            state.item ? "opacity-100" : "opacity-0"
+          )}
+          style={{
+            left: state.offsetLeft,
+            top: state.offsetTop,
+            width: state.offsetWidth,
+            height: state.offsetHeight,
+          }}
+        >
+          <SlideWrapper item="Products" visibleItem={state.item}>
+            <Products ref={(el) => (refs.current["Products"] = el)} />
+          </SlideWrapper>
+          <SlideWrapper item="Solutions" visibleItem={state.item}>
+            <Solutions
+              ref={(el) => (refs.current["Solutions"] = el)}
+              isVisible={state.item === "Solutions"}
+            />
+          </SlideWrapper>
+          <SlideWrapper item="Developers" visibleItem={state.item}>
+            <Developers ref={(el) => (refs.current["Developers"] = el)} />
+          </SlideWrapper>
+          <SlideWrapper item="Resources" visibleItem={state.item}>
+            <Resources ref={(el) => (refs.current["Resources"] = el)} />
+          </SlideWrapper>
+          <SlideWrapper item="Pricing" visibleItem={state.item}>
+            <Pricing ref={(el) => (refs.current["Pricing"] = el)} />
+          </SlideWrapper>
+        </div>
+      </Portal>
+    </>
   );
 }
 
@@ -112,47 +171,27 @@ const SlideWrapper = ({
 }: PropsWithChildren<{ item: MenuItem; visibleItem: MenuItem | null }>) => {
   const order = menuItemOrder.indexOf(item);
   const orderVisible = visibleItem ? menuItemOrder.indexOf(visibleItem) : null;
+  const isVisible = item === visibleItem;
 
   return (
     <div
       className={clsx(
         "absolute",
         "transition-all",
-        item === visibleItem ? "opacity-100" : "opacity-0",
+        isVisible ? "opacity-100" : "opacity-0",
         orderVisible != null && order > orderVisible && "x-transform-24",
-        orderVisible != null && order < orderVisible && "-x-transform-24",
+        orderVisible != null && order < orderVisible && "-x-transform-24"
       )}
       style={{
         minWidth: "max-content",
+      }}
+      ref={(el) => {
+        // https://github.com/facebook/react/issues/17157
+        if (isVisible) el?.removeAttribute("inert");
+        else el?.setAttribute("inert", "true");
       }}
     >
       {children}
     </div>
   );
-};
-
-const Products = forwardRef<HTMLDivElement>(function Products(_props, ref) {
-  return <div ref={ref}>Products {lines(3, 1)}</div>;
-});
-const Solutions = forwardRef<HTMLDivElement>(function Solutions(_props, ref) {
-  return <div ref={ref}>Solutions {lines(8, 10)}</div>;
-});
-const Developers = forwardRef<HTMLDivElement>(function Developers(_props, ref) {
-  return <div ref={ref}>Developers {lines(5, 25)}</div>;
-});
-const Resources = forwardRef<HTMLDivElement>(function Resources(_props, ref) {
-  return <div ref={ref}>Resources {lines(7, 7)}</div>;
-});
-const Pricing = forwardRef<HTMLDivElement>(function Pricing(_props, ref) {
-  return <div ref={ref}>Pricing {lines(2, 12)}</div>;
-});
-
-const lines = (n: number, chars: number) => {
-  const arr = (length: number) => Array(length).fill(null);
-
-  return arr(n).map((_, i) => (
-    <div key={i}>
-      Line {i} - {arr(chars).map((_, j) => j)}{" "}
-    </div>
-  ));
 };
